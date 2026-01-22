@@ -1,14 +1,11 @@
-/*
-Enter JS here
-
-HTML for list topic list item
-<li class="list-group-item">
-    NEW TOPIC HERE
-</li>
-*/
 // 1. select form & topic list
 let topicForm = document.querySelector(".new-topic-form")
-let topicList = document.querySelector(".topicList")
+let topicList = document.querySelector(".topics-list")
+
+// HTML for list topic list item
+//<li class="list-group-item">
+//    NEW TOPIC HERE
+//</li>
 
 // 5. create a function to add the text input to the topic list
  const addTopicToPage = (topicName, topicListElement) => {
