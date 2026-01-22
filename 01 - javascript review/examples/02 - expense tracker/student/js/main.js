@@ -1,42 +1,92 @@
-//Instruction On expense-tracker-code-explained.md
-// 1. select form & topic list
-let topicForm = document.querySelector(".new-topic-form")
-let topicList = document.querySelector(".topics-list")
 
-// HTML for list topic list item
-//<li class="list-group-item">
-//    NEW TOPIC HERE
-//</li>
+// 1. import data
+import theExpenses from "./expense-data.js";
 
-// 5. create a function to add the text input to the topic list
- const addTopicToPage = (topicName, topicListElement) => {
-      //6a. create a new inner list element and update the HTML
-    let newTopicElement = `<li class="list-group-item">
-        ${topicName}
-    </li>`
-    topicListElement.innerHTML += newTopicElement
- }
+// 2. get expense container & list elements
+const expenseContainer = document.getElementById("expense-container")
+const expenseList = document.getElementById("expense-list")
 
-// 2.  add event listener & stop default form 
-topicForm.addEventListener(
-    "Submit",
-    (event) => {
-        console.log(event)
-        event.preventDefault()
+// 3. create a function to render our expenses
+function renderExpenses(expenses) {
+    // first, clear existing container contents
+    expenseContainer.innerHTML = "";
 
-        // 3. grab input text & store value
-        let topicInput = event.target.elements["new-topic"]
-        let topiText = topicInput.Value
+    // render out a card for each expense in data
+    expenses.forEach((expense) => { 
+        expenseContainer.innerHTML += `
+        <div class="card" id="${expense.id}">
+          <div class="header">
+            <div>
+              <div class="title">${expense.title}</div>
+              <div class="meta category">${expense.category}</div>
+            </div>
+            <div class="amount">$${expense.amount}</div>
+          </div>
+          <div class="meta date">${expense.date}</div>
+          <div class="actions">
+            <button class="edit-btn" id=${expense.id}>Edit</button>
+            <button class="delete-btn" id=${expense.id}>Delete</button>
+          </div>
+        </div>            
+        `;
+    });
+}
 
-        // 4. input validation (no empty strings, use bootstrap)
-        if (!topicText === "") {
-            topicInput.classList.add("is-valid")
-        }else {
-            topicInput.classList.remove("is-valid")
+renderExpenses(theExpenses);
+
+// 3. handle behaviour for form submission
+document.getElementById("expense-form-add").addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault() // prevent default HTML form submission behaviour
+
+        // generate objects with values from DOM input fields
+        const title = document.getElementById("title").value;
+        const category = document.getElementById("category").value;
+        const date = document.getElementById("date").value;
+        const amount = document.getElementById("amount").value;
+
+        // add a new expense to the data container if our submit button was clicked
+        if (document.getElementById("submiter").innerText === "Add Expense") {
+            const newExpense = {
+                id: theExpenses.length + 1, // basic way to auto-increment IDs
+                title,
+                category,
+                date,
+                amount,
+            };
+
+            theExpenses.push(newExpense) // add our new expense to the data array
+            renderExpenses(theExpenses)  // re-render expenses
+            this.reset();
+        } else {
+            const expenseId = parseInt(document.getElementById("expense-id").value) // get hidden ID input from input fields
+            const expenseToEdit = theExpenses.find(
+                (expense) => expense.id === expenseId
+            ); // match an actual data element in expense container by id
+
+            if (expenseToEdit) {  // first, make sure we actually got an object!
+                expenseToEdit.title = title;
+                expenseToEdit.category = category;
+                expenseToEdit.date = date;
+                expenseToEdit.amount = amount;
+                this.reset();
+                document.getElementById("submiter").innerText = "Add Expense";
+                renderExpenses(theExpenses);
+            }
         }
-
-        // 6. call the addTopicToPage function w/ text from the input field
-        addTopicToPage(topicText, topicList)
     }
 )
 
+// 4. simple searchbox filter
+document.getElementById("searchbox").addEventListener(
+    "input",  // logic will fire every time there's input change in the searchbox
+    function (event) {
+        const searchTerm = event.target.value.toLowerCase();
+        const filteredExpenses = theExpenses.filter(
+            (expense) => expense.title.toLowerCase().includes(searchTerm)
+        );
+        renderExpenses(filteredExpenses);
+    }
+)
