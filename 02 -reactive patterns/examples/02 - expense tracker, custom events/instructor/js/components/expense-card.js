@@ -84,34 +84,19 @@ class ExpenseCard extends HTMLElement {
     // We'll listen for .edit-btn and .delete-btn being clicked, and fire custom events.
     // I recommend adding event listeners only when the component attaches to the DOM, *rather than* in the constructor.
 
-    // 1. edit button clicked event
-    this.shadowRoot.querySelector(".edit-btn").addEventListener(
-      "click",
-      () => {
-        this.dispatchEvent(
-          new CustomEvent(
-            "expense-edit", // first param: name of custom event
-            {                 // second param: payload & behaviour
-              detail: { id: this.id }, // detail: message paylod. Here, just the ID of the card
-              bubbles: true,           // propagates upward thru DOM, without needing to know to/from components
-              compose: true,           // event (and therefore message payload) can cross shadow DOM boundary
-            }
-          )
-        );
-      }
-    );
-
     // 1. delete button clicked event
     this.shadowRoot.querySelector(".delete-btn").addEventListener(
       "click",
       () => {
+        console.log("ExpenseCard: got click event for edit!")
         this.dispatchEvent(
           new CustomEvent(
             "expense-delete", // first param: name of custom event
             {                 // second param: payload & behaviour
               detail: { id: this.id }, // detail: message paylod. Here, just the ID of the card
               bubbles: true,           // propagates upward thru DOM, without needing to know to/from components
-              compose: true,           // event (and therefore message payload) can cross shadow DOM boundary
+              composed: true            // event (and therefore message payload) can cross shadow DOM boundary
+              // fix: typo, "compose" should have been "composed"
             }
           )
         );
@@ -122,6 +107,7 @@ class ExpenseCard extends HTMLElement {
     this.shadowRoot.querySelector(".edit-btn").addEventListener(
       "click",
       () => {
+        console.log("ExpenseCard: got click event for edit!")
         this.dispatchEvent(
           new CustomEvent(
             "expense-edit", // first param: name of custom event
@@ -134,7 +120,8 @@ class ExpenseCard extends HTMLElement {
                 amount: this.getAttribute("amount"),
                },                      // detail: message paylod
               bubbles: true,           // propagates upward thru DOM, without needing to know to/from components
-              compose: true,           // event (and therefore message payload) can cross shadow DOM boundary
+              composed: true            // event (and therefore message payload) can cross shadow DOM boundary
+              // fix: typo, "compose" should have been "composed"
             }
           )
         );
