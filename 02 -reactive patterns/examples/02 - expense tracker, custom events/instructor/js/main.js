@@ -48,3 +48,25 @@ document.getElementById("expense-form-add").addEventListener("submit", (e) => {
         submitButton.innerText = "Add Expense";
     }
 });
+
+// Step 3: add listener to our custom delete event
+expenseContainer.addEventListener("expense-delete", (e) => {
+    const id = Number(e.detail.id);
+    console.log("Delete event received for ID:", id);
+});
+
+// Step 4: add listener to our custom edit event
+expenseContainer.addEventListener("expense-edit", (e) => {
+  // when the custom edit event fires...
+  // first, change the button text -> this will put us in the edit branching logic of our form
+  document.getElementById("submitter").innerText = "Edit";
+  // then, populate form fields with data
+  const { id, title, category, date, amount } = e.detail; // "destructuring"
+  console.log("Edit event received for ID:", id);
+  // populate the input fields with the values from the event message payload
+  document.getElementById("title").value = title;
+  document.getElementById("category").value = category;
+  document.getElementById("date").value = date;
+  document.getElementById("amount").value = amount;
+  document.getElementById("expense-id").value = Number(id);
+});
