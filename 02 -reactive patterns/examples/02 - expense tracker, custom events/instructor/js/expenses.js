@@ -42,7 +42,14 @@ const expenses = {
   clear() {
     this.list = [];
     this.publish("update", this.list);
-  }
+  },
+
+  // When working with logic in multiple places, you can just make a skeleton first
+  // and implement details later!
+  removeExpense(id) {}, // I know I'll need at least an ID to identify what to remove
+
+  editExpense(id, updatedExpense) {},
+
 };
 
 Object.assign(expenses, PubSub);
