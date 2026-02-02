@@ -48,7 +48,7 @@ class ResourceResults extends HTMLElement {
         }
       );
       
-        this.dispatchEvent(selectedEvent);
+        this.dispatchEvent(resultSelectedEvent);
       
     }
   }
